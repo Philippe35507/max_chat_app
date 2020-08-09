@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../widgets/chat/messages.dart';
+
 class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -28,13 +30,35 @@ class ChatScreen extends StatelessWidget {
             ),
           ],
           onChanged: (itemIdentifier) {
-              if (itemIdentifier == 'logout') {
-                FirebaseAuth.instance.signOut();
-              }
+            if (itemIdentifier == 'logout') {
+              FirebaseAuth.instance.signOut();
+            }
           },
         ),
       ]),
-      body: StreamBuilder(
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Messages(),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Firestore.instance
+              .collection('chats/WEZMY0k6Vm1lOYucThoi/messages')
+              .add({'text': 'added by clicking the plus button !!!'});
+        },
+      ),
+    );
+  }
+}
+
+/*
+StreamBuilder(
           stream: Firestore.instance
               .collection('chats/WEZMY0k6Vm1lOYucThoi/messages')
               .snapshots(),
@@ -53,14 +77,4 @@ class ChatScreen extends StatelessWidget {
               ),
             );
           }),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Firestore.instance
-              .collection('chats/WEZMY0k6Vm1lOYucThoi/messages')
-              .add({'text': 'added by clicking the plus button !!!'});
-        },
-      ),
-    );
-  }
-}
+*/
